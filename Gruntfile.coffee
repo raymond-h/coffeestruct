@@ -15,10 +15,18 @@ module.exports = (grunt) ->
 
 		coffeelint:
 			build:
-				files: src: ['src/**/*.coffee', 'test/**/*.coffee']
+				files: src: [
+					'Gruntfile.coffee'
+					'src/**/*.coffee', 'test/**/*.coffee'
+				]
+
 			options:
-				no_tabs: level: 'ignore' # this is tab land, boy
-				indentation: value: 1 # single tabs
+				no_tabs:
+					level: 'ignore' # this is tab land, boy
+				indentation:
+					value: 1 # single tabs
+				no_unnecessary_double_quotes:
+					level: 'warn' # single-quotes only unless necessary
 
 		mochaTest:
 			test:
@@ -26,19 +34,19 @@ module.exports = (grunt) ->
 					reporter: 'spec'
 					require: ['coffee-script/register']
 
-				src: ['test/**/*.test.(js|coffee)']
+				src: ['test/**/*.test.{js,coffee}']
 
 		watch:
 			dev:
-				files: ['src/**/*.(js|coffee)', 'test/**/*.(js|coffee)']
+				files: ['src/**/*.{js,coffee}', 'test/**/*.{js,coffee}']
 				tasks: ['lint', 'test']
 
 			test:
-				files: ['src/**/*.(js|coffee)', 'test/**/*.(js|coffee)']
+				files: ['src/**/*.{js,coffee}', 'test/**/*.{js,coffee}']
 				tasks: ['test']
 
 			lint:
-				files: ['src/**/*.(js|coffee)', 'test/**/*.(js|coffee)']
+				files: ['src/**/*.{js,coffee}', 'test/**/*.{js,coffee}']
 				tasks: ['lint']
 
 	grunt.registerTask 'default', ['build']
