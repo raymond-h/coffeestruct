@@ -39,7 +39,7 @@ module.exports = (grunt) ->
 		watch:
 			dev:
 				files: ['src/**/*.{js,coffee}', 'test/**/*.{js,coffee}']
-				tasks: ['lint', 'test']
+				tasks: ['lint', 'test', 'build']
 
 			test:
 				files: ['src/**/*.{js,coffee}', 'test/**/*.{js,coffee}']
@@ -49,7 +49,7 @@ module.exports = (grunt) ->
 				files: ['src/**/*.{js,coffee}', 'test/**/*.{js,coffee}']
 				tasks: ['lint']
 
-	grunt.registerTask 'default', ['build']
+	grunt.registerTask 'default', ['lint', 'test', 'build']
 
 	grunt.registerTask 'build', ['coffee:build']
 
