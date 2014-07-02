@@ -12,7 +12,7 @@ argv = require 'yargs'
 .argv
 
 instance = new Coffeestruct()
-(require path.join process.cwd(), 'Construct.coffee')(instance)
+(require path.join process.cwd(), 'Construct')(instance)
 
 if not argv.watch
 	task = argv._[0] ? 'main'
