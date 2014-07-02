@@ -16,7 +16,7 @@
     "grunt": "*",
     "load-grunt-tasks": "*",
     "grunt-contrib-coffee": "*",
-    "grunt-coffeelint": "*",
+    "grunt-coffeelint": "vojtajina/grunt-coffeelint",
     "grunt-contrib-watch": "*",
     "chai": "*",
     "grunt-mocha-test": "*"
