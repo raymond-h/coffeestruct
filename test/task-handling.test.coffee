@@ -4,4 +4,6 @@ chai = require 'chai'
 {expect} = chai
 chai.should()
 
+taskHandling = require '../src/task-handling'
+
 describe 'Coffeestruct (task handling)', ->

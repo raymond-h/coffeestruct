@@ -4,6 +4,8 @@ chai = require 'chai'
 {expect} = chai
 chai.should()
 
+fileUtil = require '../src/file-util'
+
 describe 'File utils', ->
 	describe '.hasBeenModified()', ->
 		it 'should return true when at least one input
