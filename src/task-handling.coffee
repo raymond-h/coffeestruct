@@ -28,36 +28,35 @@ class exports.Coffeestruct
 			.onUpdate (..., async) ->
 				action? input, output, async()
 
+	findFilesToUpdate: (task) ->
+		files = @tasks[task].files
+		totalFilesToUpdate = []
 
-exports.findFilesToUpdate = (instance, task) ->
-	files = instance.tasks[task].files
-	totalFilesToUpdate = []
+		needsUpdate = (output) =>
+			if hasBeenModified (@tree.dependents output), [output]
+				totalFilesToUpdate.push output
+				return false
 
-	needsUpdate = (output) ->
-		if hasBeenModified (instance.tree.dependents output), [output]
-			totalFilesToUpdate.push output
-			return false
+			else return true
 
-		else return true
+		## Figure out which files need updating
+		process = (output) =>
+			dependencies = @tree.dependencies output
 
-	## Figure out which files need updating
-	process = (output) ->
-		dependencies = instance.tree.dependencies output
-
-		if dependencies.length is 0
-			needsUpdate output
-
-		else
-			vals = (process file for file in dependencies)
-			if _.all vals
+			if dependencies.length is 0
 				needsUpdate output
 
-	process file for file in files
-	totalFilesToUpdate
+			else
+				vals = (process file for file in dependencies)
+				if _.all vals
+					needsUpdate output
 
-exports.executeTask = (instance, task, callback) ->
-	## Figure out which files need updating
-	updateFiles = exports.findFilesToUpdate instance, task
-	
-	## Perform update
-	instance.tree.update updateFiles, triggerTarget: false, callback
+		process file for file in files
+		totalFilesToUpdate
+
+	executeTask: (task, callback) ->
+		## Figure out which files need updating
+		updateFiles = @findFilesToUpdate task
+		
+		## Perform update
+		@tree.update updateFiles, triggerTarget: false, callback
