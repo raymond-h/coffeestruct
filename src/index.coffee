@@ -2,67 +2,9 @@ path = require 'path'
 fs = require 'fs'
 
 _ = require 'underscore'
-deptree = require 'deptree-updater'
-async = require 'async'
 
+{Coffeestruct, executeTask} = require './task-handling'
 {hasBeenModified} = require './file-util'
-
-tree = deptree()
-
-class Coffeestruct
-	constructor: ->
-		@tasks = {}
-
-	task: (name, params) ->
-		files = ([].concat params.files).map (f) -> path.resolve f
-
-		@tasks[name] =
-			name: name
-			files: files
-			action: params.action
-
-	file: (output, input, action) ->
-		output = ([].concat output).map (f) -> path.resolve f
-		input = ([].concat input).map (f) -> path.resolve f
-
-		for file in output
-			tree file
-			.dependsOn input...
-			.onUpdate (..., async) ->
-				action? input, output, async()
-
-findFilesToUpdate = (task) ->
-	files = instance.tasks[task].files
-	totalFilesToUpdate = []
-
-	needsUpdate = (output) ->
-		if hasBeenModified (tree.dependents output), [output]
-			totalFilesToUpdate.push output
-			return false
-
-		else return true
-
-	## Figure out which files need updating
-	process = (output) ->
-		dependencies = tree.dependencies output
-
-		if dependencies.length is 0
-			needsUpdate output
-
-		else
-			vals = (process file for file in dependencies)
-			if _.all vals
-				needsUpdate output
-
-	process file for file in files
-	totalFilesToUpdate
-
-executeTask = (task, callback) ->
-	## Figure out which files need updating
-	updateFiles = findFilesToUpdate task
-	
-	## Perform update
-	tree.update updateFiles, triggerTarget: false, callback
 
 # [node, script, argv...] = process.argv
 argv = require 'yargs'
@@ -70,7 +12,7 @@ argv = require 'yargs'
 .argv
 
 instance = new Coffeestruct()
-(require path.join process.cwd(), 'Construct')(instance)
+(require path.join process.cwd(), 'Construct.coffee')(instance)
 
 if not argv.watch
 	task = argv._[0] ? 'main'
@@ -85,7 +27,7 @@ else
 	handleUpdate = _.debounce ->
 		return if updated.length is 0
 
-		tree.update updated, triggerTarget: false, ->
+		instance.tree.update updated, triggerTarget: false, ->
 			updated = []
 			console.log 'Done building'
 	, 500, true
