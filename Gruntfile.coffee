@@ -26,7 +26,7 @@ module.exports = (grunt) ->
 				indentation:
 					value: 1 # single tabs
 				no_unnecessary_double_quotes:
-					level: 'warn' # single-quotes only unless necessary
+					level: 'error' # single-quotes only unless necessary
 
 		mochaTest:
 			test:
