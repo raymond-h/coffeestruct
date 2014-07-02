@@ -1,6 +1,7 @@
 path = require 'path'
 fs = require 'fs'
 
+require 'coffee-script/register'
 _ = require 'underscore'
 
 {Coffeestruct, executeTask} = require './task-handling'
