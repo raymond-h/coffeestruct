@@ -6,10 +6,9 @@ _ = require 'underscore'
 
 {Coffeestruct} = require './task-handling'
 
-# [node, script, argv...] = process.argv
 argv = require 'yargs'
-.alias 'w', 'watch'
-.argv
+	.alias 'w', 'watch'
+	.argv
 
 instance = new Coffeestruct()
 (require path.join process.cwd(), 'Construct')(instance)
