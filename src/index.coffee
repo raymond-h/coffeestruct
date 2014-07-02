@@ -5,6 +5,8 @@ _ = require 'underscore'
 deptree = require 'deptree-updater'
 async = require 'async'
 
+{hasBeenModified} = require './file-util'
+
 tree = deptree()
 
 class Coffeestruct
@@ -28,22 +30,6 @@ class Coffeestruct
 			.dependsOn input...
 			.onUpdate (..., async) ->
 				action? input, output, async()
-
-hasBeenModified = (output, input) ->
-	if _.any (output.map (file) -> not fs.existsSync file)
-		return true
-
-	[inputModTimes, outputModTimes] = [
-		(fs.statSync(file).mtime.getTime() for file in input)
-		(fs.statSync(file).mtime.getTime() for file in output)
-	]
-
-	[latestInputTime, earliestOutputTime] = [
-		_.max(inputModTimes)
-		_.min(outputModTimes)
-	]
-
-	latestInputTime > earliestOutputTime
 
 findFilesToUpdate = (task) ->
 	files = instance.tasks[task].files
