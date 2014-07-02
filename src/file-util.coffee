@@ -1,3 +1,5 @@
+fs = require 'fs'
+
 _ = require 'underscore'
 
 exports.hasBeenModified = (output, input) ->

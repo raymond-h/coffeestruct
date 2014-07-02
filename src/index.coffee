@@ -5,7 +5,6 @@ require 'coffee-script/register'
 _ = require 'underscore'
 
 {Coffeestruct, executeTask} = require './task-handling'
-{hasBeenModified} = require './file-util'
 
 # [node, script, argv...] = process.argv
 argv = require 'yargs'
@@ -18,7 +17,7 @@ instance = new Coffeestruct()
 if not argv.watch
 	task = argv._[0] ? 'main'
 
-	executeTask task, ->
+	executeTask instance, task, ->
 		console.log 'Done building'
 
 else

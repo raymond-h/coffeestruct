@@ -1,4 +1,9 @@
+path = require 'path'
+
+_ = require 'underscore'
 deptree = require 'deptree-updater'
+
+{hasBeenModified} = require './file-util'
 
 class exports.Coffeestruct
 	constructor: ->
@@ -18,7 +23,7 @@ class exports.Coffeestruct
 		input = ([].concat input).map (f) -> path.resolve f
 
 		for file in output
-			tree file
+			@tree file
 			.dependsOn input...
 			.onUpdate (..., async) ->
 				action? input, output, async()
@@ -52,7 +57,7 @@ exports.findFilesToUpdate = (instance, task) ->
 
 exports.executeTask = (instance, task, callback) ->
 	## Figure out which files need updating
-	updateFiles = exports.findFilesToUpdate task
+	updateFiles = exports.findFilesToUpdate instance, task
 	
 	## Perform update
 	instance.tree.update updateFiles, triggerTarget: false, callback
